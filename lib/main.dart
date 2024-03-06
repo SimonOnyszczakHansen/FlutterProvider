@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/providers/counter_provider.dart'; // Import the CounterProvider
+import 'package:provider/provider.dart'; // Import the provider package
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      // Wraps the application in a ChangeNotifierProvider
+      create: (context) => CounterProvider(), // Creates an instance of CounterProvider
+      child: const MyApp(), // The root widget of the application
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -13,40 +21,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'), // The home page of the app
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   final String title;
 
@@ -55,35 +39,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-    if (_counter % 3 == 0) {
-      _showMessage();
-    }
-  }
-
-  void _decrementCounter() {
-    if (_counter != 0) {
-      setState(() {
-        _counter--;
-      });
-    }
-  }
-
-  void _showMessage() {
-    final snackBar = SnackBar(
-      content: Text('This is the $_counter press'),
-      duration: const Duration(seconds: 1),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
   @override
   Widget build(BuildContext context) {
+    // Uses Provider to get the current instance of CounterProvider
+    final counterProvider = Provider.of<CounterProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -97,19 +57,29 @@ class _MyHomePageState extends State<MyHomePage> {
               'You have pushed the button this many times:',
             ),
             Text(
-              '$_counter',
+              '${counterProvider.counter}', // Displays the counter value from CounterProvider
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 FloatingActionButton(
-                    onPressed: _incrementCounter,
-                    tooltip: 'increment',
+                    onPressed: () {
+                      counterProvider.incrementCounter(); // Increments the counter
+                      // Shows a SnackBar every 3 presses
+                      if (counterProvider.counter % 3 == 0) {
+                        final snackBar = SnackBar(
+                          content: Text('This is the ${counterProvider.counter} press'),
+                          duration: const Duration(seconds: 1),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
+                    },
+                    tooltip: 'Increment',
                     child: const Icon(Icons.add)),
                 FloatingActionButton(
-                  onPressed: _decrementCounter,
-                  tooltip: 'decrement',
+                  onPressed: counterProvider.decrementCounter, // Decrements the counter
+                  tooltip: 'Decrement',
                   child: const Icon(Icons.remove),
                 )
               ],
