@@ -70,8 +70,7 @@ class _MyProviderPageState extends State<MyProviderPage> {
             ),
             ListTile(
               title: const Text('bloc screen'),
-              onTap: () {
-              },
+              onTap: () => context.go('/bloc_page'),
             ),
           ],
         ),
