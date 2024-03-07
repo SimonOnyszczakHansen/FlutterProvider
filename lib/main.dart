@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/providers/counter_provider.dart'; // Import the CounterProvider
-import 'package:provider/provider.dart'; // Import the provider package
+import 'package:flutter/painting.dart';
+import 'package:flutter_application_1/providers/counter_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(
     ChangeNotifierProvider(
       // Wraps the application in a ChangeNotifierProvider
-      create: (context) => CounterProvider(), // Creates an instance of CounterProvider
+      create: (context) =>
+          CounterProvider(), // Creates an instance of CounterProvider
       child: const MyApp(), // The root widget of the application
     ),
   );
@@ -15,16 +17,15 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'), // The home page of the app
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -45,10 +46,42 @@ class _MyHomePageState extends State<MyHomePage> {
     final counterProvider = Provider.of<CounterProvider>(context);
 
     return Scaffold(
+      drawer: Drawer(
+          child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          const DrawerHeader(
+            decoration: BoxDecoration(color: Colors.blue),
+            child: Text(
+              "Burger menu",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          ListTile(
+            title: const Text(
+              "provider screen",
+              style: TextStyle(color: Colors.blue),
+              ),
+            onTap: () {}),
+          ListTile(
+            title: const Text(
+              "bloc screen",
+              style: TextStyle(color: Colors.blue),
+              ),
+            onTap: () {},
+          ),
+          ListTile(
+            title: const Text(
+              "stream screen",
+              style: TextStyle(color: Colors.blue),
+              ),
+            onTap: () {},
+          )
+        ],
+      )),
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: const Text("Flutter Providers")),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -65,11 +98,12 @@ class _MyHomePageState extends State<MyHomePage> {
               children: [
                 FloatingActionButton(
                     onPressed: () {
-                      counterProvider.incrementCounter(); // Increments the counter
+                      counterProvider.incrementCounter();
                       // Shows a SnackBar every 3 presses
                       if (counterProvider.counter % 3 == 0) {
                         final snackBar = SnackBar(
-                          content: Text('This is the ${counterProvider.counter} press'),
+                          content: Text(
+                              'This is the ${counterProvider.counter} press'),
                           duration: const Duration(seconds: 1),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -77,8 +111,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                     tooltip: 'Increment',
                     child: const Icon(Icons.add)),
+                const SizedBox(width: 50),
                 FloatingActionButton(
-                  onPressed: counterProvider.decrementCounter, // Decrements the counter
+                  onPressed: counterProvider.decrementCounter,
                   tooltip: 'Decrement',
                   child: const Icon(Icons.remove),
                 )
