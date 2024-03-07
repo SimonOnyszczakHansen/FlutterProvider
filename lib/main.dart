@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/providers/counter_provider.dart'; // Import the CounterProvider
+import 'package:flutter_application_1/provider/counter_provider.dart'; // Import the CounterProvider
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_application_1/provider_page.dart';
@@ -77,6 +77,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.deepPurple,
               ),
               child: Text('Burger Menu'),
+            ),
+            ListTile(
+              title: const Text('Home'),
+              onTap: () => context.go('/'),
             ),
             ListTile(
               title: const Text('provider screen'),

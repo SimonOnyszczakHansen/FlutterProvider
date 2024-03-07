@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/providers/counter_provider.dart'; // Import the CounterProvider
+import 'package:flutter_application_1/provider/counter_provider.dart'; // Import the CounterProvider
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 
 void main() {
   runApp(
@@ -52,23 +53,28 @@ class _MyProviderPageState extends State<MyProviderPage> {
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
-          children:  <Widget>[
+          children: <Widget>[
             const DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.deepPurple
-                ),
+                color: Colors.deepPurple,
+              ),
               child: Text('Burger Menu'),
             ),
             ListTile(
+              title: const Text('Home'),
+              onTap: () => context.go('/'),
+            ),
+            ListTile(
               title: const Text('provider screen'),
-              onTap: () {},
+              onTap: () => context.go('/provider_page')
             ),
             ListTile(
               title: const Text('bloc screen'),
-              onTap: () {},
-            )
+              onTap: () {
+              },
+            ),
           ],
-        )
+        ),
       ),
       body: Center(
         child: Column(
