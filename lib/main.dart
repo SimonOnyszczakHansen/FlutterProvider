@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/providers/counter_provider.dart'; // Import the CounterProvider
-import 'package:provider/provider.dart'; // Import the provider package
+import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+import 'package:flutter_application_1/provider_page.dart';
 
 void main() {
   runApp(
@@ -12,22 +14,41 @@ void main() {
   );
 }
 
+final GoRouter _router = GoRouter(
+  routes: <RouteBase>[
+    GoRoute(
+      path: '/',
+      builder: (BuildContext context, GoRouterState state) {
+        return const MyHomePage(title: 'Flutter Demo');
+      }
+    ),
+    GoRoute(
+      path: '/provider_page',
+      builder: (BuildContext context, GoRouterState state) {
+        return const MyProviderPage(title: 'Provider Page');
+      }
+      ),
+  ]
+);
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'), // The home page of the app
+      routerDelegate: _router.routerDelegate,
+      routeInformationParser: _router.routeInformationParser,
+      routeInformationProvider: _router.routeInformationProvider,
     );
   }
 }
+
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -41,50 +62,38 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    // Uses Provider to get the current instance of CounterProvider
-    final counterProvider = Provider.of<CounterProvider>(context);
-
+    // Simpler UI with just a "Welcome" message
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: Text(widget.title), // Uses the title passed to MyHomePage
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.deepPurple,
+              ),
+              child: Text('Burger Menu'),
+            ),
+            ListTile(
+              title: const Text('provider screen'),
+              onTap: () => context.go('/provider_page')
+            ),
+            ListTile(
+              title: const Text('bloc screen'),
+              onTap: () {
+              },
+            ),
+          ],
+        ),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '${counterProvider.counter}', // Displays the counter value from CounterProvider
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                FloatingActionButton(
-                    onPressed: () {
-                      counterProvider.incrementCounter(); // Increments the counter
-                      // Shows a SnackBar every 3 presses
-                      if (counterProvider.counter % 3 == 0) {
-                        final snackBar = SnackBar(
-                          content: Text('This is the ${counterProvider.counter} press'),
-                          duration: const Duration(seconds: 1),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-                    },
-                    tooltip: 'Increment',
-                    child: const Icon(Icons.add)),
-                FloatingActionButton(
-                  onPressed: counterProvider.decrementCounter, // Decrements the counter
-                  tooltip: 'Decrement',
-                  child: const Icon(Icons.remove),
-                )
-              ],
-            )
-          ],
+        child: Text(
+          'Welcome To My Application',
+          style: Theme.of(context).textTheme.headlineMedium,
         ),
       ),
     );
