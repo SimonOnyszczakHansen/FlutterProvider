@@ -77,8 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // Simpler UI with just a "Welcome" message
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text('Home Page'), // Uses the title passed to MyHomePage
+        title: const Text('Home Page'),
       ),
       drawer: Drawer(
         child: ListView(

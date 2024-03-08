@@ -22,7 +22,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
       home: const MyProviderPage(title: 'Provider Page'), // The home page of the app
@@ -47,7 +46,6 @@ class _MyProviderPageState extends State<MyProviderPage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text("Provider Page"),
       ),
       drawer: Drawer(
